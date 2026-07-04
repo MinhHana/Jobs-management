@@ -38,7 +38,7 @@ private struct AppRootView: View {
     var body: some View {
         MainTabView()
             .onAppear {
-                try? CategorySeeder.seedDefaults(in: modelContext)
+                _ = try? CategorySeeder.seedDefaults(in: modelContext)
                 Task {
                     await NotificationService.shared.requestAuthorization()
                     await CloudSyncService.shared.refreshAccountStatus()
