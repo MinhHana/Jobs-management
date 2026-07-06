@@ -22,7 +22,7 @@ struct TaskStatusService {
     }
 
     private static func restoreActiveStatus(for task: JobTask) {
-        let steps = task.steps
+        let steps = task.steps ?? []
         if steps.contains(where: { $0.status == .inProgress || $0.status == .completed }) {
             task.status = .inProgress
         } else {

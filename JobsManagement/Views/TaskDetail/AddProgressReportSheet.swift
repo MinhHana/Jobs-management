@@ -58,7 +58,7 @@ struct AddProgressReportSheet: View {
             task: task
         )
         modelContext.insert(report)
-        task.reports.append(report)
+        task.appendReport(report)
         dismiss()
     }
 }

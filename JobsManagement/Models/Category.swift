@@ -3,15 +3,15 @@ import SwiftData
 
 @Model
 final class Category {
-    @Attribute(.unique) var id: UUID
-    var name: String
-    var iconName: String
-    var colorHex: String
-    var categoryType: TaskCategoryType
-    var isCustom: Bool
+    var id: UUID = UUID()
+    var name: String = ""
+    var iconName: String = ""
+    var colorHex: String = ""
+    var categoryType: TaskCategoryType = .custom
+    var isCustom: Bool = false
 
     @Relationship(deleteRule: .nullify, inverse: \JobTask.category)
-    var tasks: [JobTask] = []
+    var tasks: [JobTask]?
 
     init(
         id: UUID = UUID(),

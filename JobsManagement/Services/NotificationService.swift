@@ -132,7 +132,7 @@ final class NotificationService {
             .filter { $0.hasPrefix(prefix) }
 
         center.removePendingNotificationRequests(withIdentifiers: identifiers)
-        task.reminders.removeAll()
+        task.clearReminders()
     }
 
     // MARK: - Helpers

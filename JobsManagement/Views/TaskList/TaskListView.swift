@@ -224,7 +224,7 @@ struct TaskListView: View {
         task.status = .completed
         task.completedAt = .now
         task.progressPercent = 100
-        for step in task.steps where step.status != .completed {
+        for step in (task.steps ?? []) where step.status != .completed {
             step.status = .completed
             step.completedAt = .now
         }
