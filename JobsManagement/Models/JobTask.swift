@@ -3,27 +3,27 @@ import SwiftData
 
 @Model
 final class JobTask {
-    var title: String
-    var notes: String
-    var workTaskType: WorkTaskType
-    var priority: Priority
+    var title: String = ""
+    var notes: String = ""
+    var workTaskType: WorkTaskType = .oneoff
+    var priority: Priority = .medium
     var dueDate: Date?
     var completedAt: Date?
-    var status: TaskStatus
-    var progressPercent: Int
+    var status: TaskStatus = .pending
+    var progressPercent: Int = 0
     var recurrenceRule: String?
     var estimatedDuration: TimeInterval?
 
     var category: Category?
 
     @Relationship(deleteRule: .cascade, inverse: \TaskStep.task)
-    var steps: [TaskStep] = []
+    var steps: [TaskStep]?
 
     @Relationship(deleteRule: .cascade, inverse: \TaskReport.task)
-    var reports: [TaskReport] = []
+    var reports: [TaskReport]?
 
     @Relationship(deleteRule: .cascade, inverse: \Reminder.task)
-    var reminders: [Reminder] = []
+    var reminders: [Reminder]?
 
     init(
         title: String,
@@ -49,5 +49,24 @@ final class JobTask {
         self.recurrenceRule = recurrenceRule
         self.estimatedDuration = estimatedDuration
         self.category = category
+    }
+
+    func appendStep(_ step: TaskStep) {
+        if steps == nil { steps = [] }
+        steps?.append(step)
+    }
+
+    func appendReport(_ report: TaskReport) {
+        if reports == nil { reports = [] }
+        reports?.append(report)
+    }
+
+    func appendReminder(_ reminder: Reminder) {
+        if reminders == nil { reminders = [] }
+        reminders?.append(reminder)
+    }
+
+    func clearReminders() {
+        reminders = []
     }
 }

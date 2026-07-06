@@ -11,7 +11,7 @@ struct ProgressCalculator {
 
     /// Updates a task's `progressPercent` from its steps.
     static func syncProgress(for task: JobTask) {
-        task.progressPercent = calculateProgress(from: task.steps)
+        task.progressPercent = calculateProgress(from: task.steps ?? [])
     }
 
     /// Returns whether the task is behind its expected timeline.

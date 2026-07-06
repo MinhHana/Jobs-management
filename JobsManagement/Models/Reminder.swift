@@ -3,10 +3,10 @@ import SwiftData
 
 @Model
 final class Reminder {
-    @Attribute(.unique) var id: UUID
-    var type: ReminderType
-    var scheduledAt: Date
-    var isEnabled: Bool
+    var id: UUID = UUID()
+    var type: ReminderType = .custom
+    var scheduledAt: Date = .now
+    var isEnabled: Bool = true
 
     var task: JobTask?
 

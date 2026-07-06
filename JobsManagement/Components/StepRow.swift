@@ -54,7 +54,7 @@ struct StepRow: View {
     }
 
     private func updateTaskStatus(_ task: JobTask) {
-        let steps = task.steps
+        let steps = task.steps ?? []
         guard !steps.isEmpty else { return }
 
         if steps.allSatisfy({ $0.status == .completed || $0.status == .skipped }) {

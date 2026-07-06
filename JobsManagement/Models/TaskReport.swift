@@ -3,10 +3,10 @@ import SwiftData
 
 @Model
 final class TaskReport {
-    @Attribute(.unique) var id: UUID
-    var reportedAt: Date
-    var content: String
-    var progressSnapshot: Int
+    var id: UUID = UUID()
+    var reportedAt: Date = .now
+    var content: String = ""
+    var progressSnapshot: Int = 0
 
     var task: JobTask?
 

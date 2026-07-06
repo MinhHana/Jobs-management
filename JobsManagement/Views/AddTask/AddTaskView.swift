@@ -238,7 +238,7 @@ struct AddTaskView: View {
         for (index, stepTitle) in validSteps.enumerated() {
             let step = TaskStep(title: stepTitle, orderIndex: index, task: task)
             modelContext.insert(step)
-            task.steps.append(step)
+            task.appendStep(step)
         }
 
         ProgressCalculator.syncProgress(for: task)
@@ -246,20 +246,20 @@ struct AddTaskView: View {
         if enableDueReminder, hasDueDate {
             let reminder = Reminder(type: .dueDate, scheduledAt: dueDate, task: task)
             modelContext.insert(reminder)
-            task.reminders.append(reminder)
+            task.appendReminder(reminder)
         }
 
         if enableProgressReminder {
             let progressDate = NotificationService.defaultProgressCheckDate(for: task) ?? Date.now.addingTimeInterval(3600)
             let reminder = Reminder(type: .progress, scheduledAt: progressDate, task: task)
             modelContext.insert(reminder)
-            task.reminders.append(reminder)
+            task.appendReminder(reminder)
         }
 
         if customReminderEnabled {
             let reminder = Reminder(type: .custom, scheduledAt: customReminderDate, task: task)
             modelContext.insert(reminder)
-            task.reminders.append(reminder)
+            task.appendReminder(reminder)
         }
 
         try? modelContext.save()

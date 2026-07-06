@@ -10,11 +10,11 @@ struct TaskDetailView: View {
     @State private var newStepTitle = ""
 
     private var sortedSteps: [TaskStep] {
-        task.steps.sorted { $0.orderIndex < $1.orderIndex }
+        (task.steps ?? []).sorted { $0.orderIndex < $1.orderIndex }
     }
 
     private var sortedReports: [TaskReport] {
-        task.reports.sorted { $0.reportedAt > $1.reportedAt }
+        (task.reports ?? []).sorted { $0.reportedAt > $1.reportedAt }
     }
 
     private var categoryColor: Color {
@@ -119,7 +119,7 @@ struct TaskDetailView: View {
                 Text("Các bước")
                     .font(.headline)
                 Spacer()
-                Text("\(completedStepCount)/\(task.steps.count)")
+                Text("\(completedStepCount)/\((task.steps ?? []).count)")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
@@ -193,17 +193,17 @@ struct TaskDetailView: View {
     // MARK: - Helpers
 
     private var completedStepCount: Int {
-        task.steps.filter { $0.status == .completed }.count
+        (task.steps ?? []).filter { $0.status == .completed }.count
     }
 
     private func addStep() {
         let title = newStepTitle.trimmingCharacters(in: .whitespaces)
         guard !title.isEmpty else { return }
 
-        let nextIndex = (task.steps.map(\.orderIndex).max() ?? -1) + 1
+        let nextIndex = ((task.steps ?? []).map(\.orderIndex).max() ?? -1) + 1
         let step = TaskStep(title: title, orderIndex: nextIndex, task: task)
         modelContext.insert(step)
-        task.steps.append(step)
+        task.appendStep(step)
         ProgressCalculator.syncProgress(for: task)
         newStepTitle = ""
     }

@@ -3,10 +3,10 @@ import SwiftData
 
 @Model
 final class TaskStep {
-    @Attribute(.unique) var id: UUID
-    var title: String
-    var orderIndex: Int
-    var status: StepStatus
+    var id: UUID = UUID()
+    var title: String = ""
+    var orderIndex: Int = 0
+    var status: StepStatus = .pending
     var completedAt: Date?
 
     var task: JobTask?
