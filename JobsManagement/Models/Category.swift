@@ -7,7 +7,7 @@ final class Category {
     var name: String = ""
     var iconName: String = ""
     var colorHex: String = ""
-    var categoryType: TaskCategoryType = .custom
+    var categoryType: TaskCategoryType = TaskCategoryType.custom
     var isCustom: Bool = false
 
     @Relationship(deleteRule: .nullify, inverse: \JobTask.category)

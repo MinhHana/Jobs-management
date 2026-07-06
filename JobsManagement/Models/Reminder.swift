@@ -4,7 +4,7 @@ import SwiftData
 @Model
 final class Reminder {
     var id: UUID = UUID()
-    var type: ReminderType = .custom
+    var type: ReminderType = ReminderType.custom
     var scheduledAt: Date = .now
     var isEnabled: Bool = true
 

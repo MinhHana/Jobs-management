@@ -5,11 +5,11 @@ import SwiftData
 final class JobTask {
     var title: String = ""
     var notes: String = ""
-    var workTaskType: WorkTaskType = .oneoff
-    var priority: Priority = .medium
+    var workTaskType: WorkTaskType = WorkTaskType.oneoff
+    var priority: Priority = Priority.medium
     var dueDate: Date?
     var completedAt: Date?
-    var status: TaskStatus = .pending
+    var status: TaskStatus = TaskStatus.pending
     var progressPercent: Int = 0
     var recurrenceRule: String?
     var estimatedDuration: TimeInterval?
