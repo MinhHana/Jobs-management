@@ -114,6 +114,9 @@ struct TaskListView: View {
             .background(Color(.systemGroupedBackground))
             .navigationTitle("Công việc")
             .searchable(text: $searchText, prompt: "Tìm kiếm công việc")
+            .onAppear {
+                TaskStatusService.syncOverdueStatus(for: allTasks)
+            }
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Menu {

@@ -240,7 +240,7 @@ private struct ReportTimelineRow: View {
                     Spacer()
                     Text("\(report.progressSnapshot)%")
                         .font(.caption.bold())
-                        .foregroundStyle(.accentColor)
+                        .foregroundStyle(Color.accentColor)
                 }
 
                 Text(report.content)

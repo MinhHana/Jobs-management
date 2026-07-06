@@ -19,6 +19,10 @@ struct ReportsView: View {
         return Int((Double(completedCount) / Double(tasks.count)) * 100)
     }
 
+    private var recentReports: [TaskReport] {
+        Array(reports.sorted { $0.reportedAt > $1.reportedAt }.prefix(10))
+    }
+
     private var weeklyData: [WeeklyCompletionItem] {
         let calendar = Calendar.current
         let today = calendar.startOfDay(for: .now)
@@ -125,16 +129,14 @@ struct ReportsView: View {
             Text("Báo cáo gần đây")
                 .font(.headline)
 
-            let recent = reports.sorted { $0.reportedAt > $1.reportedAt }.prefix(10)
-
-            if recent.isEmpty {
+            if recentReports.isEmpty {
                 Text("Chưa có báo cáo tiến độ")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
                     .frame(maxWidth: .infinity, alignment: .center)
                     .padding(.vertical, 24)
             } else {
-                ForEach(Array(recent), id: \.id) { report in
+                ForEach(recentReports, id: \.id) { report in
                     VStack(alignment: .leading, spacing: 6) {
                         HStack {
                             if let taskTitle = report.task?.title {
@@ -144,7 +146,7 @@ struct ReportsView: View {
                             Spacer()
                             Text("\(report.progressSnapshot)%")
                                 .font(.caption.bold())
-                                .foregroundStyle(.accentColor)
+                                .foregroundStyle(Color.accentColor)
                         }
 
                         Text(report.content)

@@ -226,6 +226,7 @@ struct AddTaskView: View {
             priority: priority,
             dueDate: hasDueDate ? dueDate : nil,
             recurrenceRule: isRecurring ? recurrenceRule : nil,
+            estimatedDuration: hasDueDate ? max(dueDate.timeIntervalSince(.now), 3600) : nil,
             category: category
         )
         modelContext.insert(task)
@@ -249,7 +250,8 @@ struct AddTaskView: View {
         }
 
         if enableProgressReminder {
-            let reminder = Reminder(type: .progress, scheduledAt: .now, task: task)
+            let progressDate = NotificationService.defaultProgressCheckDate(for: task) ?? Date.now.addingTimeInterval(3600)
+            let reminder = Reminder(type: .progress, scheduledAt: progressDate, task: task)
             modelContext.insert(reminder)
             task.reminders.append(reminder)
         }
@@ -267,7 +269,8 @@ struct AddTaskView: View {
                 await NotificationService.shared.scheduleDeadlineReminder(for: task)
             }
             if enableProgressReminder {
-                await NotificationService.shared.scheduleProgressReminder(for: task)
+                let progressDate = NotificationService.defaultProgressCheckDate(for: task)
+                await NotificationService.shared.scheduleProgressReminder(for: task, at: progressDate)
             }
             if customReminderEnabled {
                 await NotificationService.shared.scheduleCustomReminder(for: task, at: customReminderDate)

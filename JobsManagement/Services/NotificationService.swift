@@ -22,7 +22,8 @@ final class NotificationService {
     // MARK: - Scheduling
 
     func scheduleDeadlineReminder(for task: JobTask) async {
-        guard let dueDate = task.dueDate else { return }
+        guard NotificationPreferences.dueDateRemindersEnabled,
+              let dueDate = task.dueDate else { return }
 
         let offsets: [(TimeInterval, String)] = [
             (24 * 60 * 60, "1day"),
@@ -51,38 +52,35 @@ final class NotificationService {
             let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
 
             try? await center.add(request)
-
-            let reminder = Reminder(type: .dueDate, scheduledAt: fireDate, task: task)
-            task.reminders.append(reminder)
         }
     }
 
-    func scheduleProgressReminder(for task: JobTask) async {
-        guard ProgressCalculator.shouldTriggerProgressReminder(task: task) else { return }
+    func scheduleProgressReminder(for task: JobTask, at fireDate: Date? = nil) async {
+        guard NotificationPreferences.progressRemindersEnabled else { return }
 
-        let fireDate = Date.now.addingTimeInterval(60 * 60)
+        guard let scheduledDate = fireDate ?? Self.defaultProgressCheckDate(for: task),
+              scheduledDate > .now else { return }
+
         let identifier = progressIdentifier(for: task)
 
         let content = UNMutableNotificationContent()
-        content.title = "Tiến độ chậm"
-        content.body = "Công việc \"\(task.title)\" đang chậm so với kế hoạch. Hãy cập nhật tiến độ."
+        content.title = "Kiểm tra tiến độ"
+        content.body = "Hãy cập nhật tiến độ cho \"\(task.title)\"."
         content.sound = .default
 
         let components = Calendar.current.dateComponents(
             [.year, .month, .day, .hour, .minute],
-            from: fireDate
+            from: scheduledDate
         )
         let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
         let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
 
         try? await center.add(request)
-
-        let reminder = Reminder(type: .progress, scheduledAt: fireDate, task: task)
-        task.reminders.append(reminder)
     }
 
     func scheduleCustomReminder(for task: JobTask, at date: Date) async {
-        guard date > .now else { return }
+        guard NotificationPreferences.notificationsEnabled,
+              date > .now else { return }
 
         let identifier = "\(notificationPrefix(for: task))-custom"
         let content = UNMutableNotificationContent()
@@ -101,6 +99,8 @@ final class NotificationService {
     }
 
     func scheduleDailyDigest(at hour: Int = 8) async {
+        guard NotificationPreferences.dailyDigestEnabled else { return }
+
         let identifier = dailyDigestIdentifier
 
         let content = UNMutableNotificationContent()
@@ -133,6 +133,30 @@ final class NotificationService {
 
         center.removePendingNotificationRequests(withIdentifiers: identifiers)
         task.reminders.removeAll()
+    }
+
+    // MARK: - Helpers
+
+    /// Thời điểm nhắc kiểm tra tiến độ — giữa lúc bắt đầu và hạn hoàn thành.
+    static func defaultProgressCheckDate(for task: JobTask, referenceDate: Date = .now) -> Date? {
+        guard let dueDate = task.dueDate else {
+            return referenceDate.addingTimeInterval(24 * 60 * 60)
+        }
+
+        let startDate: Date
+        if let duration = task.estimatedDuration, duration > 0 {
+            startDate = dueDate.addingTimeInterval(-duration)
+        } else {
+            startDate = referenceDate
+        }
+
+        let midpoint = startDate.addingTimeInterval(dueDate.timeIntervalSince(startDate) / 2)
+        if midpoint > referenceDate {
+            return midpoint
+        }
+
+        let oneHourLater = referenceDate.addingTimeInterval(60 * 60)
+        return oneHourLater < dueDate ? oneHourLater : nil
     }
 
     // MARK: - Identifiers
