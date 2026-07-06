@@ -75,6 +75,9 @@ struct DashboardView: View {
             }
             .background(Color(.systemGroupedBackground))
             .navigationTitle("Tổng quan")
+            .onAppear {
+                TaskStatusService.syncOverdueStatus(for: tasks)
+            }
         }
     }
 

@@ -51,6 +51,15 @@ struct SettingsView: View {
             }
             .navigationTitle("Cài đặt")
             .preferredColorScheme(appearanceMode.colorScheme)
+            .onChange(of: notificationsEnabled) { _, enabled in
+                Task {
+                    if enabled && dailyDigestEnabled {
+                        await NotificationService.shared.scheduleDailyDigest(at: 8)
+                    } else {
+                        await NotificationService.shared.cancelDailyDigest()
+                    }
+                }
+            }
             .onChange(of: dailyDigestEnabled) { _, enabled in
                 Task {
                     if enabled && notificationsEnabled {
@@ -173,7 +182,7 @@ struct SettingsView: View {
         } header: {
             Text("Thông báo")
         } footer: {
-            Text("Quản lý các loại nhắc nhở cho công việc của bạn.")
+            Text("Tắt một loại nhắc nhở sẽ ngăn không lên lịch thông báo mới cho loại đó.")
         }
     }
 

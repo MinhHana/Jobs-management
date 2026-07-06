@@ -37,6 +37,8 @@
 		C10000050000000000000001 /* AddProgressReportSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C20000050000000000000001 /* AddProgressReportSheet.swift */; };
 		D10000010000000000000001 /* CloudSyncConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20000010000000000000001 /* CloudSyncConstants.swift */; };
 		D10000020000000000000001 /* CloudSyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20000020000000000000001 /* CloudSyncService.swift */; };
+		D10000030000000000000001 /* NotificationPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20000040000000000000001 /* NotificationPreferences.swift */; };
+		D10000040000000000000001 /* TaskStatusService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20000050000000000000001 /* TaskStatusService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -73,6 +75,8 @@
 		D20000010000000000000001 /* CloudSyncConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudSyncConstants.swift; sourceTree = "<group>"; };
 		D20000020000000000000001 /* CloudSyncService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudSyncService.swift; sourceTree = "<group>"; };
 		D20000030000000000000001 /* JobsManagement.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = JobsManagement.entitlements; sourceTree = "<group>"; };
+		D20000040000000000000001 /* NotificationPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationPreferences.swift; sourceTree = "<group>"; };
+		D20000050000000000000001 /* TaskStatusService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskStatusService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -136,8 +140,10 @@
 				A20000080000000000000001 /* CategorySeeder.swift */,
 				D20000010000000000000001 /* CloudSyncConstants.swift */,
 				D20000020000000000000001 /* CloudSyncService.swift */,
+				D20000040000000000000001 /* NotificationPreferences.swift */,
 				A20000090000000000000001 /* NotificationService.swift */,
 				A200000A0000000000000001 /* ProgressCalculator.swift */,
+				D20000050000000000000001 /* TaskStatusService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -327,6 +333,8 @@
 				A100000A0000000000000001 /* ProgressCalculator.swift in Sources */,
 				D10000010000000000000001 /* CloudSyncConstants.swift in Sources */,
 				D10000020000000000000001 /* CloudSyncService.swift in Sources */,
+				D10000030000000000000001 /* NotificationPreferences.swift in Sources */,
+				D10000040000000000000001 /* TaskStatusService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

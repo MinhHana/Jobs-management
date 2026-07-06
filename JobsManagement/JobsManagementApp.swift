@@ -34,14 +34,19 @@ struct JobsManagementApp: App {
 
 private struct AppRootView: View {
     @Environment(\.modelContext) private var modelContext
+    @Query private var tasks: [JobTask]
 
     var body: some View {
         MainTabView()
             .onAppear {
                 _ = try? CategorySeeder.seedDefaults(in: modelContext)
+                TaskStatusService.syncOverdueStatus(for: tasks)
                 Task {
                     await NotificationService.shared.requestAuthorization()
                     await CloudSyncService.shared.refreshAccountStatus()
+                    if NotificationPreferences.dailyDigestEnabled {
+                        await NotificationService.shared.scheduleDailyDigest(at: 8)
+                    }
                 }
             }
     }
