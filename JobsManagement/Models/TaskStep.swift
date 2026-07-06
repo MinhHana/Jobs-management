@@ -6,7 +6,7 @@ final class TaskStep {
     var id: UUID = UUID()
     var title: String = ""
     var orderIndex: Int = 0
-    var status: StepStatus = .pending
+    var status: StepStatus = StepStatus.pending
     var completedAt: Date?
 
     var task: JobTask?
