@@ -125,14 +125,26 @@ final class NotificationService {
     // MARK: - Cancellation
 
     func cancelReminders(for task: JobTask) async {
-        let prefix = notificationPrefix(for: task)
+        await cancelPendingNotifications(withPrefix: notificationPrefix(for: task))
+        task.clearReminders()
+    }
+
+    /// Removes pending notifications by identifier prefix.
+    ///
+    /// Takes a plain `String` so callers can capture the prefix before deleting
+    /// the underlying model, avoiding access to an invalidated `JobTask`.
+    func cancelPendingNotifications(withPrefix prefix: String) async {
         let pending = await center.pendingNotificationRequests()
         let identifiers = pending
             .map(\.identifier)
             .filter { $0.hasPrefix(prefix) }
 
         center.removePendingNotificationRequests(withIdentifiers: identifiers)
-        task.clearReminders()
+    }
+
+    /// Identifier prefix shared by every notification scheduled for a task.
+    func identifierPrefix(for task: JobTask) -> String {
+        notificationPrefix(for: task)
     }
 
     // MARK: - Helpers
