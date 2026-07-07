@@ -56,7 +56,7 @@ struct TaskListView: View {
     var body: some View {
         NavigationStack {
             Group {
-                if filteredTasks.isEmpty && searchText.isEmpty && selectedCategoryID == nil {
+                if filteredTasks.isEmpty && searchText.isEmpty && selectedCategoryID == nil && selectedWorkType == nil {
                     EmptyStateView(
                         icon: "checklist",
                         title: "Chưa có công việc",
@@ -214,8 +214,9 @@ struct TaskListView: View {
     }
 
     private func deleteTask(_ task: JobTask) {
+        let prefix = NotificationService.shared.identifierPrefix(for: task)
         Task {
-            await NotificationService.shared.cancelReminders(for: task)
+            await NotificationService.shared.cancelPendingNotifications(withPrefix: prefix)
         }
         modelContext.delete(task)
     }

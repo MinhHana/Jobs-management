@@ -1,12 +1,16 @@
 import Foundation
 
 struct ProgressCalculator {
-    /// Calculates progress as the percentage of steps marked completed.
+    /// Calculates progress as the percentage of resolved steps.
+    ///
+    /// A step counts as resolved when it is either completed or skipped, matching
+    /// the completion rule used to auto-complete a task. This keeps a fully
+    /// resolved (and therefore completed) task at 100%.
     static func calculateProgress(from steps: [TaskStep]) -> Int {
         guard !steps.isEmpty else { return 0 }
 
-        let completedCount = steps.filter { $0.status == .completed }.count
-        return Int((Double(completedCount) / Double(steps.count)) * 100)
+        let resolvedCount = steps.filter { $0.status == .completed || $0.status == .skipped }.count
+        return Int((Double(resolvedCount) / Double(steps.count)) * 100)
     }
 
     /// Updates a task's `progressPercent` from its steps.
